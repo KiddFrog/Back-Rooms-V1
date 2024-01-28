@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://df0akh5xdfbrp"]
+
+[ext_resource type="Script" path="res://view_model.gd" id="1_nhfyo"]
+[ext_resource type="PackedScene" uid="uid://brxowrxxewqqo" path="res://Hand Blender/HandV2.blend" id="2_od5d1"]
+
+[node name="view_model_camera" type="Camera3D"]
+fov = 35.0
+script = ExtResource("1_nhfyo")
+
+[node name="fps_rig" type="Node3D" parent="."]
+
+[node name="item" type="Node3D" parent="fps_rig"]
+
+[node name="HandV2" parent="." instance=ExtResource("2_od5d1")]
+transform = Transform3D(0.25, 0, 0, 0, 0.160553, -0.191632, 0, 0.191632, 0.160553, 1.31351, -1.16961, -1.43458)

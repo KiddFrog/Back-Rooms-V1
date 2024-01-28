@@ -1,0 +1,157 @@
+[gd_scene load_steps=16 format=3 uid="uid://cxhvtepeqg8q2"]
+
+[ext_resource type="Texture2D" uid="uid://bag2wxv405s60" path="res://assets/textures/dev/grids/Dark/texture_07.png" id="1_sc1cg"]
+[ext_resource type="Texture2D" uid="uid://evpr031ov370" path="res://assets/hdris/kloofendal_48d_partly_cloudy_puresky_2k.hdr" id="2_lg672"]
+[ext_resource type="PackedScene" uid="uid://b6ucsemxawdi" path="res://assets/Domms Assets/ComputerChair.blend" id="3_g26yu"]
+[ext_resource type="Script" path="res://scripts/player.gd" id="3_jbccq"]
+[ext_resource type="PackedScene" uid="uid://brxowrxxewqqo" path="res://Hand Blender/HandV2.blend" id="4_imt5i"]
+[ext_resource type="Script" path="res://scripts/DeskKeyScript.gd" id="5_4batu"]
+[ext_resource type="PackedScene" uid="uid://xp50nepumhcg" path="res://assets/Domms Assets/ComputerDesk.blend" id="5_kgt3u"]
+[ext_resource type="PackedScene" uid="uid://c7lpo1cmbf80j" path="res://assets/PSX_Keys/key_racing.fbx" id="7_1xj0g"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o6upd"]
+albedo_texture = ExtResource("1_sc1cg")
+uv1_triplanar = true
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_gm4mm"]
+height = 1.41139
+radius = 0.308575
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_c70hl"]
+panorama = ExtResource("2_lg672")
+
+[sub_resource type="Sky" id="Sky_djnxa"]
+sky_material = SubResource("PanoramaSkyMaterial_c70hl")
+
+[sub_resource type="Environment" id="Environment_wpr1n"]
+background_mode = 2
+sky = SubResource("Sky_djnxa")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_6pmrc"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_2a4mj"]
+height = 1.2
+
+[node name="world" type="Node3D"]
+
+[node name="stage" type="Node3D" parent="."]
+
+[node name="CSGBox3D" type="CSGBox3D" parent="stage"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+use_collision = true
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_o6upd")
+
+[node name="CSGBox3D" type="CSGBox3D" parent="stage/CSGBox3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -13.4022, 2.78513, 0)
+use_collision = true
+size = Vector3(20, 1, 20)
+material = SubResource("StandardMaterial3D_o6upd")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="stage/CSGBox3D/CSGBox3D"]
+
+[node name="ComputerDesk" parent="stage/CSGBox3D/CSGBox3D/WorldEnvironment" instance=ExtResource("5_kgt3u")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.7196, 0, -7.53878)
+
+[node name="CSGBox3D" type="CSGBox3D" parent="stage/CSGBox3D/CSGBox3D/WorldEnvironment/ComputerDesk"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00168538, 0.508643, -0.0150099)
+visible = false
+use_collision = true
+size = Vector3(1.87845, 1.11572, 1)
+
+[node name="RigidBody3D" type="RigidBody3D" parent="stage/CSGBox3D/CSGBox3D/WorldEnvironment"]
+transform = Transform3D(-0.878384, 0, 0.477956, 0, 1, 0, -0.477956, 0, -0.878384, 2.36667, 0, -6.56149)
+collision_layer = 4
+collision_mask = 7
+mass = 638.16
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="stage/CSGBox3D/CSGBox3D/WorldEnvironment/RigidBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0190003, 0.70673, -0.0229998)
+shape = SubResource("CylinderShape3D_gm4mm")
+
+[node name="ComputerChair" parent="stage/CSGBox3D/CSGBox3D/WorldEnvironment/RigidBody3D" instance=ExtResource("3_g26yu")]
+
+[node name="Key" parent="stage/CSGBox3D/CSGBox3D/WorldEnvironment" instance=ExtResource("7_1xj0g")]
+transform = Transform3D(0.999998, 0.001799, -0.0011605, -0.00179851, 0.999998, 0.000421153, 0.00116125, -0.000419061, 0.999999, 2.07855, 1.0665, -7.26755)
+script = ExtResource("5_4batu")
+
+[node name="env" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="env"]
+environment = SubResource("Environment_wpr1n")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="env"]
+transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75, -0.433013, 0, 0, 0)
+shadow_enabled = true
+
+[node name="WorldAssets" type="Node3D" parent="env"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.54074, 4.76837e-07, -4.28134)
+
+[node name="player" type="CharacterBody3D" parent="."]
+collision_layer = 2
+collision_mask = 3
+script = ExtResource("3_jbccq")
+
+[node name="standing_collision_shape" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_6pmrc")
+
+[node name="crouching_collision_shape" type="CollisionShape3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.601693, 0)
+shape = SubResource("CapsuleShape3D_2a4mj")
+disabled = true
+
+[node name="RayCast3D" type="RayCast3D" parent="player"]
+target_position = Vector3(0, 2, 0)
+
+[node name="neck" type="Node3D" parent="player"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, 0)
+
+[node name="head" type="Node3D" parent="player/neck"]
+
+[node name="eyes" type="Node3D" parent="player/neck/head"]
+
+[node name="Camera3D" type="Camera3D" parent="player/neck/head/eyes"]
+cull_mask = 1048573
+
+[node name="SpringArm3D" type="SpringArm3D" parent="player/neck/head"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, 1, -0.981, 0.004)
+
+[node name="HandV2" parent="player/neck/head/SpringArm3D" instance=ExtResource("4_imt5i")]
+transform = Transform3D(-0.075, 1.99052e-09, 1.87452e-08, -1.64034e-08, 0.029857, -0.0688009, -9.28832e-09, -0.0688009, -0.029857, -1.34579, -0.716753, 0.128311)
+
+[node name="Skeleton3D" parent="player/neck/head/SpringArm3D/HandV2/LP_hands" index="0"]
+bones/0/scale = Vector3(1, 1, 1)
+bones/2/rotation = Quaternion(-0.00472308, 0, 0, 0.999989)
+bones/2/scale = Vector3(1, 1, 1)
+bones/3/rotation = Quaternion(0.000186124, 0.000471322, 0.102735, 0.994709)
+bones/4/rotation = Quaternion(2.82866e-12, -1.25624e-11, 0.0138278, 0.999904)
+bones/4/scale = Vector3(1, 1, 1)
+bones/5/rotation = Quaternion(-1.22669e-11, 8.63855e-11, -0.0941038, 0.995562)
+bones/6/rotation = Quaternion(-1.74642e-05, -4.23785e-05, 0.0718218, 0.997418)
+bones/8/position = Vector3(0.530151, 3.21023, -0.0202027)
+bones/8/rotation = Quaternion(5.201e-12, 6.83353e-11, -0.0758906, 0.997116)
+bones/9/scale = Vector3(1, 1, 1)
+bones/11/position = Vector3(1.05339, 2.75398, 0.0198332)
+bones/11/rotation = Quaternion(1.1819e-11, 1.02439e-10, -0.114615, 0.99341)
+bones/11/scale = Vector3(1, 1, 1)
+bones/12/rotation = Quaternion(-2.4684e-11, -3.77642e-12, 0.00416561, 0.999991)
+bones/14/position = Vector3(1.49427, 1.94382, 0.0952463)
+bones/15/scale = Vector3(1, 1, 1)
+bones/16/rotation = Quaternion(1.25746e-12, 1.28866e-11, -0.0139039, 0.999903)
+bones/17/position = Vector3(-1.76614, 0.974415, 0.000296035)
+bones/17/rotation = Quaternion(-0.116528, 0.989356, 0.0101949, 0.0865575)
+bones/17/scale = Vector3(1, 1, 1)
+bones/18/rotation = Quaternion(0.000864344, 1.42494e-07, 0.00490192, 0.999988)
+bones/19/rotation = Quaternion(0.00479452, 4.19586e-09, 0.0271911, 0.999619)
+bones/19/scale = Vector3(1, 1, 1)
+
+[node name="Cube" parent="player/neck/head/SpringArm3D/HandV2/LP_hands/Skeleton3D" index="0"]
+transform = Transform3D(1, 9.4739e-15, 4.73695e-15, -9.4739e-15, 1, -3.97364e-08, -4.73695e-15, 3.97364e-08, 1, 0, 0, 0)
+
+[node name="AnimationPlayer" parent="player/neck/head/SpringArm3D/HandV2" index="1"]
+autoplay = "IDLE"
+
+[editable path="player/neck/head/SpringArm3D/HandV2"]

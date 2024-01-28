@@ -1,0 +1,15 @@
+[gd_scene load_steps=4 format=3 uid="uid://dp6bm850d6ve2"]
+
+[ext_resource type="PackedScene" uid="uid://c7lpo1cmbf80j" path="res://assets/PSX_Keys/key_racing.fbx" id="1_igqhf"]
+[ext_resource type="Shader" path="res://outlineShader.gdshader" id="2_qfoxe"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ljhlw"]
+render_priority = 0
+shader = ExtResource("2_qfoxe")
+shader_parameter/outline_width = 1.7
+shader_parameter/base_color = Color(1, 0.882353, 0.34902, 1)
+
+[node name="Root Scene" instance=ExtResource("1_igqhf")]
+
+[node name="key_racing" parent="RootNode" index="0"]
+material_overlay = SubResource("ShaderMaterial_ljhlw")
